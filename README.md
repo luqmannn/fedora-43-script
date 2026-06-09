@@ -1,6 +1,7 @@
 ### Fedora 43 setup
 
 I'm using Fedora server ISO for my setup, but Workstation ISO should work fine with some adjustment.
+
 Download the repo
 ```sh
 git clone https://github.com/luqmannn/Lost-Notes.git
@@ -49,3 +50,5 @@ Disable **GPU accelerated rendering in web views** for Steam
 
 **Don't install Virtualbox**
 It will **messed up** your USB Wifi & Bluetooth
+Be very careful with software that need to recompile your kernel. Because after reboot, somethings happened that caused
+kernel module for my USB wifi adapter to be not loaded and I cannot use wifi and bluetooth anymore -_- -_- -_-
