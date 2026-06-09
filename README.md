@@ -49,6 +49,7 @@ df -hT /
 Disable **GPU accelerated rendering in web views** for Steam
 
 **Don't install Virtualbox**
-It will **messed up** your USB Wifi & Bluetooth
+**It will messed up your USB Wifi & Bluetooth**
+
 Be very careful with software that need to recompile your kernel. Because after reboot, somethings happened that caused
-kernel module for my USB wifi adapter to be not loaded and I cannot use wifi and bluetooth anymore -_- -_- -_-
+kernel module for my USB wifi adapter to be not loaded and I cannot use wifi and bluetooth anymore :expressionless: :cry: :hurtrealbad:
