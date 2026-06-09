@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# -----------------------------
+# Colours (LGL style)
+# -----------------------------
+GREEN='\033[38;2;0;255;0m'     # #00ff00
+ORANGE='\033[38;2;255;153;0m'  # #ff9900
+RED='\033[38;2;255;68;68m'     # #ff4444
+WHITE='\033[38;2;249;249;249m' # #f9f9f9
+RESET='\033[0m'
+BOLD='\033[1m'
+
+section() { printf "\n${BOLD}${GREEN}==> %s${RESET}\n" "$1"; }
+info() { printf "${WHITE}%s${RESET}\n" "$1"; }
+
+os_version=$(rpm -E %fedora)
+info "Detected Fedora version: $os_version"
+
+section "Enable RPM Fusion (free and non-free)"
+sudo dnf install \
+https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$os_version.noarch.rpm \
+https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$os_version.noarch.rpm
+sudo dnf update
+
+info "Install DE, system tools, codecs and drivers"
+for package in $(cat packages.txt);
+do
+	sudo dnf install $package;
+done
+
+section "Install Ani-Cli"
+sudo dnf copr enable derisis13/ani-cli
+sudo dnf install ani-cli
+
+section "Install Docker"
+sudo dnf remove docker \
+docker-client \
+docker-client-latest \
+docker-common \
+docker-latest \
+docker-latest-logrotate \
+docker-logrotate \
+docker-selinux \
+docker-engine-selinux \
+docker-engine
+
+sudo dnf -y install dnf-plugins-core
+sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+
+sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo systemctl enable --now docker
+
+### Need to add user to docker group and restart PC
+
+section "Install Flathub and Flatpak apps"
+sudo dnf -y install flatpak
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+info "Flatseal"
+flatpak install -y flathub com.github.tchx84.Flatseal || true
+
+info "ProtonUp-Qt"
+flatpak install -y flathub net.davidotek.pupgui2 || true
+
+info "ProtonPlus"
+flatpak install -y flathub com.vysp3r.ProtonPlus || true
+
+info "Mission Center"
+flatpak install flathub io.missioncenter.MissionCenter || true
+
+info "Obsidian"
+flatpak install flathub md.obsidian.Obsidian || true
+
+info "OBS Studio"
+flatpak install flathub com.obsproject.Studio || true
+
+### Configure GNOME settings
+gsettings set org.gnome.desktop.a11y always-show-universal-access-status true
+gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
+gsettings set org.gnome.desktop.interface clock-show-weekday true
+gsettings set org.gnome.desktop.interface clock-show-seconds true
+gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
+
+### Need to create font directory and download and install nerd fonts 

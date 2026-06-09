@@ -1,0 +1,9 @@
+rm() {
+	if [[ "$*" == *"-f"* || "$*" == *"-rf"* || "$*" == *"-fr"* ]];
+	then
+	    echo "⚠️  You used rm with -f (force). This will bypass confirmation."
+        read -rp "Are you sure you want to continue? [y/N]:" confirm
+        [[ "$confirm" =~ ^[Yy]$ ]] || return 1
+    fi
+    command rm "$@"
+}
