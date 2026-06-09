@@ -41,10 +41,6 @@ fi
 
 unset rc
 
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/home/luqmannn/.lmstudio/bin"
-# End of LM Studio CLI section
-
 # Set up fzf key bindings and fuzzy completion
 eval "$(fzf --bash)"
 
